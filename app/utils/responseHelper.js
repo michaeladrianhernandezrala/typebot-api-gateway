@@ -58,11 +58,10 @@ class responseHelper {
    * @param {*} errorCode
    * @param {*} message
    */
-  static badRequest(req, res, errorCode, message = 'Bad Request') {
+  static badRequest(req, res, message = 'Bad Request') {
     const response = {
       statusCode: StatusCodes.BAD_REQUEST,
       message,
-      errorCode,
     };
 
     logger.error(responseHelper._getLog(req, response));

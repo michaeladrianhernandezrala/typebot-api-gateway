@@ -1,5 +1,6 @@
 const config = {
   PORT: 3610,
+  saltRoundsBcrypt: 10,
   sequelize: {
     DATABASE: 'typebot_service_db',
     USERNAME: 'typebot_service_user',

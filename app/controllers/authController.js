@@ -1,4 +1,8 @@
+const bcrypt = require('bcrypt');
+
+const authService = require('../services/authService');
 const responseHelper = require('../utils/responseHelper');
+const config = require('../config/config');
 
 class authController {
   /**
@@ -11,15 +15,29 @@ class authController {
     const payload = req.body;
 
     if (!payload.email) {
-      responseHelper.badRequest(req, res, 'ERROR', 'Email property is required');
+      responseHelper.badRequest(req, res, 'Email property is required');
       return;
     }
     if (!payload.password) {
-      responseHelper.badRequest(req, res, 'ERROR', 'Password property is required');
-      return;
+      responseHelper.badRequest(req, res, 'Password property is required');
     }
 
-    console.log('hoal');
+    try {
+      const user = await authService.findUserByEmail(payload.email);
+      if (user) {
+        responseHelper.badRequest(req, res, 'Email already exits');
+        return;
+      }
+
+      const hasPassword = await bcrypt.hash(payload.password, config.saltRoundsBcrypt);
+      payload.password = hasPassword;
+      payload.accountId = 1;
+
+      const userCreated = await authService.createUser(payload);
+      responseHelper.created(req, res, userCreated);
+    } catch (error) {
+      responseHelper.error(req, res, error);
+    }
   }
 }
 
