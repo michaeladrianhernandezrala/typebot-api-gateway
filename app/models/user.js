@@ -25,6 +25,11 @@ const User = db.define('User', {
     field: 'email',
     unique: true,
   },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'password',
+  },
   createdAt: {
     type: DataTypes.TIME,
     allowNull: false,
