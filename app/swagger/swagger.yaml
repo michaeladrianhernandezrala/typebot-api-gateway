@@ -52,6 +52,8 @@ paths:
                         type: string
                       lastname:
                         type: string
+                      email:
+                        type: string
                       createdAt:
                         type: string
                       updatedAt: 

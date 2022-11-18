@@ -20,7 +20,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(
   OpenApiValidator.middleware({
     apiSpec: swaggerDocument,
-    operationHandlers: path.join(__dirname, 'app', 'controllers'),
+    operationHandlers: path.join(__dirname, 'controllers'),
   }),
 );
 
