@@ -91,8 +91,8 @@ class authController {
         return;
       }
 
-      // TODO: Change time expires to minutes
-      const token = await jwt.sign({ ...user }, config.privateKeyJWT, { expiresIn: '2d' });
+      // eslint-disable-next-line max-len
+      const token = await jwt.sign({ ...user }, config.privateKeyJWT, { expiresIn: config.expiresIn });
       user.dataValues.jwt = token;
 
       responseHelper.ok(req, res, user);

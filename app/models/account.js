@@ -9,6 +9,11 @@ const Account = db.define('Account', {
     autoIncrement: true,
     primaryKey: true,
   },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    field: 'name',
+  },
   createdAt: {
     type: DataTypes.TIME,
     allowNull: false,
@@ -19,20 +24,10 @@ const Account = db.define('Account', {
     allowNull: false,
     field: 'updated_at',
   },
-  userId: {
-    type: DataTypes.BIGINT,
+  enabled: {
+    type: DataTypes.BOOLEAN,
     allowNull: false,
-    field: 'user_id',
-  },
-  image: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    field: 'image',
-  },
-  lang: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    field: 'lang',
+    field: 'enabled',
   },
 }, { tableName: 'account' });
 

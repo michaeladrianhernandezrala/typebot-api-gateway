@@ -1,275 +1,45 @@
 openapi: '3.0.2'
 info:
-  title: API Title
-  version: '1.0'
+  title: TypeBot API V1
+  version: '1.0.0'
+  description: >
+    
+    ### Introduction
+
+    This documentation describes the interface of TypeBot's API
+
+    ### Authentication
+
+    Every request to this API need an Authorization header.
+
+    There are two Authorization ways: 
+      
+    - If your intentio is to manage API calls with a server-side script you 
+    have to create a Server Key through TypeBot's console
+    
+      You can set the following Authorization Header:
+      ```
+      Authorization: ServerKey {ServerKey}
+      ```
+
+    - If your intention is to integrate this API for front-end user POST /auth 
+    endpoint authorizes a user and returns an access token.
+    
+      You can set the following Authorization Header:
+      ```
+      Authorization: Bearer ${Token}
+      ```
+
 tags:
-  - name: auth
   - name: account
-  - name: user
+    description: Endpoints for managing accounts
+  
 
 paths:
-  /auth/register:
-    post:
-      tags:
-        - "auth"
-      x-eov-operation-handler: authController
-      operationId: postRegisterUser
-      requestBody:
-        required: true
-        content: 
-          application/json:
-            schema:
-              type: object
-              properties:
-                name: 
-                  type: string
-                lastname: 
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
-              required:
-                - email
-                - password
-      responses:
-        '201':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 201
-                  message:
-                    type: string
-                    example: Ok
-                  data:
-                    type: object
-                    properties:
-                      id: 
-                        type: integer
-                      name:
-                        type: string
-                      lastname:
-                        type: string
-                      email:
-                        type: string
-                      createdAt:
-                        type: string
-                      updatedAt: 
-                        type: string
-                      accountId:
-                        type: integer
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 400
-                  message:
-                    type: string
-                  errorCode:
-                    type: string
-                    example: BAD_REQUEST
-        '401':
-          description: Unauhtorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 401
-                  message: 
-                    type: string
-                  errorCode:
-                    type: string
-                    example: UNAUTHORIZED
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 403
-                  message:
-                    type: string
-                  errorCode:
-                    type: string
-                    example: FORBIDDEN
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 404
-                  message:
-                    type: string
-                  errorCode:
-                    type: string
-                    example: NOT_FOUND
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 500
-                  message:
-                    type: string
-                  errorCode:
-                    type: string
-                    example: INTERNAL_SERVER_ERROR
-
-  /auth/login:
-    post: 
-      tags:
-        - "auth"
-      x-eov-operation-handler: authController
-      operationId: postLoginUser
-      requestBody:
-        required: true
-        content: 
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                password:
-                  type: string
-              required:
-                - email
-                - password
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 200
-                  message:
-                    type: string
-                    example: Ok
-                  data:
-                    type: object
-                    properties:
-                      id: 
-                        type: integer
-                      name:
-                        type: string
-                      lastname:
-                        type: string
-                      email:
-                        type: string
-                      createdAt:
-                        type: string
-                      updatedAt:
-                        type: string
-                      jwt:
-                        type: string
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 400
-                  message:
-                    type: string
-                  errorCode:
-                    type: string
-                    example: BAD_REQUEST
-        '401':
-          description: Unauhtorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 401
-                  message: 
-                    type: string
-                  errorCode:
-                    type: string
-                    example: UNAUTHORIZED
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 403
-                  message:
-                    type: string
-                  errorCode:
-                    type: string
-                    example: FORBIDDEN
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 404
-                  message:
-                    type: string
-                  errorCode:
-                    type: string
-                    example: NOT_FOUND
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 500
-                  message:
-                    type: string
-                  errorCode:
-                    type: string
-                    example: INTERNAL_SERVER_ERROR
-    
   /account:
     post:
       tags:
-        - "account"
+        - account
       x-eov-operation-handler: accountController
       operationId: postAccount
       requestBody:
@@ -279,12 +49,22 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                image: 
+                name: 
                   type: string
+                  description: Account's name
+                username: 
+                  type: string
+                  description: User's name
+                email:
+                  type: string
+                  description: User's email
+                password:
+                  type: string
+                  description: User's password
               required:
-                - userId
+                - name
+                - email
+                - password
       responses:
         '201':
             description: Created
@@ -294,7 +74,7 @@ paths:
                   type: object
                   properties:
                     statusCode:
-                      type: string
+                      type: integer
                       example: 201
                     message:
                       type: string
@@ -303,10 +83,35 @@ paths:
                       properties:
                         id:
                           type: integer
+                          description: Account's id
+                        name:
+                          type: string
+                          description: Account's name
                         createdAt:
                           type: string
                         updatedAt:
                           type: string
+                        enabled:
+                          type: boolean
+                        user:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: User's id
+                            email:
+                              type: string
+                              description: User's email
+                            username:
+                              type: string
+                              description: User's name
+                            createdAt:
+                              type: string
+                            updatedAt:
+                              type: string
+                            roleType:
+                              type: string
+
         '400':
           description: Bad Request
           content:
@@ -382,4 +187,254 @@ paths:
                   errorCode:
                     type: string
                     example: INTERNAL_SERVER_ERROR                  
-                
+
+  # /user:
+  #   post:
+  #     tags:
+  #       - user
+  #     description: Create a new user
+  #     x-eov-operation-handler: userController
+  #     operationId: postUser
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             required:
+  #               - userType
+  #               - roleType
+  #               - enabled
+  #               - email
+  #               - password
+  #             properties: 
+  #               userType:
+  #                 type: string
+  #                 enum:
+  #                   - human
+  #                   - server
+  #                 description: "User's type. Two types: 'human' or 'server'"
+  #               name: 
+  #                 type: string
+  #                 description: User's name
+  #               lastname:
+  #                 type: string
+  #                 description: User's lastname
+  #               email:
+  #                 type: string
+  #                 description: User's email
+  #               password:
+  #                 type: string
+  #                 description: User's password
+  #               roleType:
+  #                 type: string
+  #                 enum:
+  #                   - account_admin
+  #                   - application_user
+  #                 description: "Role's type. Two types: 'account_admin' or 'application_user"
+  #               accountId:  
+  #                 type: integer
+  #                 description: Account's id where you will create the user
+  #               description:
+  #                 type: string
+  #                 description: User's description
+  #               lang:
+  #                 type: string
+  #                 description: |
+  #                   User's language. The format is ISO 639-1 alfa-2. 
+  #                     Ex: 
+  #                     ```
+  #                     Spanish - es
+  #                     English - en
+  #                     ```
+  #               enabled:
+  #                 type: boolean
+  #                 description: If user is enabled
+  #                 enum:
+  #                   - true
+  #                   - false
+  #       required: true
+  #     responses:
+  #       '201':
+  #         description: Created
+  #         content:
+  #           application/json:
+  #             schema:
+  #               required:
+  #                 - statusCode
+  #                 - message
+  #                 - data
+  #               properties:
+  #                 statusCode:
+  #                   type: integer
+  #                   example: 201
+  #                   description: Response code
+  #                 message:  
+  #                   type: string
+  #                   example: Created
+  #                   description: message
+  #                 data: 
+  #                   type: object
+  #                   description: Data response
+  #                   properties:
+  #                     id: 
+  #                       type: integer
+  #                       description: User's id
+  #                     name:
+  #                       type: string
+  #                       description: User's name
+  #                     lastname:
+  #                       type: string
+  #                       description: User's lastname
+  #                     email:
+  #                       type: string
+  #                       description: User's email
+  #                     userType:
+  #                       type: string
+  #                       description: User's type
+  #                       enum:
+  #                         - human
+  #                         - server
+  #                     roleType:
+  #                       type: string
+  #                       description: Role's type
+  #                       enum:
+  #                         - account_admin
+  #                         - application_user
+  #                     createdAt: 
+  #                       type: string
+  #                       description: User's creation date
+  #                     updatedAt:
+  #                       type: string
+  #                       description: User's last update date
+  #                     userImage:
+  #                       type: string
+  #                       description: User's image url
+  #                     accountId:
+  #                       type: integer
+  #                       description: User's account id
+  #                     secretKey:
+  #                       type: string
+  #                     lang:
+  #                       type: string
+  #                       description: |
+  #                         User's language. The format is ISO 639-1 alfa-2. 
+  #                           Ex: 
+  #                           ```
+  #                           Spanish - es
+  #                           English - en
+  #                           ```
+  #                     enabled:
+  #                       type: boolean
+  #                       description: If user is enabled
+  #                       enum:
+  #                         - true
+  #                         - false
+  #       '400':
+  #         description: Bad Request
+  #         content:
+  #           application/json:
+  #             schema:
+  #               required:
+  #                 - statusCode
+  #                 - message
+  #                 - errorCode
+  #               properties:
+  #                 statusCode:
+  #                   type: integer
+  #                   example: 400
+  #                   description: Response code
+  #                 message:
+  #                   type: string
+  #                   example: Bad Request
+  #                   description: Message
+  #                 errorCode:
+  #                   type: string
+  #                   example: BAD_REQUEST
+  #                   description: Error code
+  #       '401':
+  #         description: Unauhtorized
+  #         content:
+  #           application/json:
+  #             schema:
+  #               required:
+  #                 - statusCode
+  #                 - message
+  #                 - errorCode
+  #               properties:
+  #                 statusCode:
+  #                   type: integer
+  #                   example: 401
+  #                   description: Response code
+  #                 message:
+  #                   type: string
+  #                   example: Unauhtorized
+  #                   description: Message
+  #                 errorCode:
+  #                   type: string
+  #                   example: UNAUTHORIZED
+  #                   description: Error code
+  #       '403':
+  #         description: Forbidden
+  #         content:
+  #           application/json:
+  #             schema:
+  #               required:
+  #                 - statusCode
+  #                 - message
+  #                 - errorCode
+  #               properties:
+  #                 statusCode:
+  #                   type: integer
+  #                   example: 403
+  #                   description: Response code
+  #                 message:
+  #                   type: string
+  #                   example: Forbidden
+  #                   description: Message
+  #                 errorCode:
+  #                   type: string
+  #                   example: FORBIDDEN
+  #                   description: Error code
+  #       '404':
+  #         description: Not found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               required:
+  #                 - statusCode
+  #                 - message
+  #                 - errorCode
+  #               properties:
+  #                 statusCode:
+  #                   type: integer
+  #                   example: 404
+  #                   description: Response code
+  #                 message:
+  #                   type: string
+  #                   example: Not found
+  #                   description: Message
+  #                 errorCode:
+  #                   type: string
+  #                   example: NOT_FOUND
+  #                   description: Error code
+  #       '500':
+  #         description: Internal Server Error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               required:
+  #                 - statusCode
+  #                 - message
+  #                 - errorCode
+  #               properties:
+  #                 statusCode:
+  #                   type: integer
+  #                   example: 500
+  #                   description: Response code
+  #                 message:
+  #                   type: string
+  #                   example: Internal Server Error
+  #                   description: Message
+  #                 errorCode:
+  #                   type: string
+  #                   example: INTERNAL_SERVER_ERROR
+  #                   description: Error code

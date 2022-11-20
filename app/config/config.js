@@ -1,6 +1,7 @@
 const config = {
-  PORT: 3610,
+  PORT: 3606,
   saltRoundsBcrypt: 10,
+  expiresIn: '5 min',
   privateKeyJWT: 'TyMtUNBwoqrNVy5EhRhy6WChkoCIXhOm',
   sequelize: {
     DATABASE: 'typebot_service_db',
