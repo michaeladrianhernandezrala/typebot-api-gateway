@@ -3,6 +3,7 @@ const app = require('express')();
 const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const YAML = require('js-yaml');
 const OpenApiValidator = require('express-openapi-validator');
 const swaggerUi = require('swagger-ui-express');
@@ -14,6 +15,7 @@ const swaggerDocument = YAML.load(fs.readFileSync(path.join(__dirname, 'swagger'
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

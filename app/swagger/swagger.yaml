@@ -4,6 +4,9 @@ info:
   version: '1.0'
 tags:
   - name: auth
+  - name: account
+  - name: user
+
 paths:
   /auth/register:
     post:
@@ -135,7 +138,7 @@ paths:
                   errorCode:
                     type: string
                     example: INTERNAL_SERVER_ERROR
-    
+
   /auth/login:
     post: 
       tags:
@@ -263,3 +266,120 @@ paths:
                     type: string
                     example: INTERNAL_SERVER_ERROR
     
+  /account:
+    post:
+      tags:
+        - "account"
+      x-eov-operation-handler: accountController
+      operationId: postAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                image: 
+                  type: string
+              required:
+                - userId
+      responses:
+        '201':
+            description: Created
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    statusCode:
+                      type: string
+                      example: 201
+                    message:
+                      type: string
+                    data:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        createdAt:
+                          type: string
+                        updatedAt:
+                          type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                  errorCode:
+                    type: string
+                    example: BAD_REQUEST
+        '401':
+          description: Unauhtorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 401
+                  message: 
+                    type: string
+                  errorCode:
+                    type: string
+                    example: UNAUTHORIZED
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 403
+                  message:
+                    type: string
+                  errorCode:
+                    type: string
+                    example: FORBIDDEN
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string
+                  errorCode:
+                    type: string
+                    example: NOT_FOUND
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 500
+                  message:
+                    type: string
+                  errorCode:
+                    type: string
+                    example: INTERNAL_SERVER_ERROR                  
+                

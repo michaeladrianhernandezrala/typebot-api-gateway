@@ -40,11 +40,6 @@ const User = db.define('User', {
     allowNullL: false,
     field: 'updated_at',
   },
-  accountId: {
-    type: DataTypes.BIGINT,
-    allowNull: false,
-    field: 'account_id',
-  },
 }, { tableName: 'user' });
 
 module.exports = User;

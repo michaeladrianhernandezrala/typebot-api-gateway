@@ -1,9 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const authService = require('../services/authService');
 const responseHelper = require('../utils/responseHelper');
 const config = require('../config/config');
+const authService = require('../services/authService');
+const accountService = require('../services/accountService');
 
 class authController {
   /**
@@ -37,11 +38,19 @@ class authController {
       const hasPassword = await bcrypt.hash(payload.password, config.saltRoundsBcrypt);
       payload.password = hasPassword;
 
-      // TODO: Create an account an associate to the user
-      payload.accountId = 1;
-
       const userCreated = await authService.createUser(payload);
-      responseHelper.created(req, res, userCreated);
+      const accountCreated = await accountService.createAccount(userCreated.dataValues.id);
+
+      const data = {
+        accountId: accountCreated.id,
+        id: userCreated.id,
+        name: userCreated.name,
+        lastname: userCreated.lastname,
+        email: userCreated.email,
+        createdAt: userCreated.createdAt,
+        updatedAt: userCreated.updatedAt,
+      };
+      responseHelper.created(req, res, data);
     } catch (error) {
       responseHelper.error(req, res, error);
     }
