@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-underscore-dangle */
 const Isemail = require('isemail');
 const bcrypt = require('bcrypt');
@@ -40,41 +41,46 @@ class accountController {
    */
   static async postAccount(req, res) {
     const payload = req.body;
+    console.log('req._user', req._user);
 
-    /**
+    try {
+      /**
      * Check if all required fields exist
      */
-    const isValidEmail = await Isemail.validate(payload.email);
-    if (!payload.email || !isValidEmail) {
-      responseHelper.badRequest(req, res, 'Email is not in right format or not present');
-      return;
+      const isValidEmail = await Isemail.validate(payload.email);
+      if (!payload.email || !isValidEmail) {
+        responseHelper.badRequest(req, res, 'Email is not in right format or not present');
+        return;
+      }
+      if (!payload.password) {
+        responseHelper.badRequest(req, res, 'Password is not in right format or not present');
+        return;
+      }
+
+      // Hash the password with bcrypt
+      const hashPassword = await bcrypt.hash(payload.password, config.saltRoundsBcrypt);
+      payload.password = hashPassword;
+
+      // Create account and user
+      const accountData = {
+        name: payload.name,
+        enabled: true,
+      };
+      const userData = {
+        name: payload.username,
+        email: payload.email,
+        password: payload.password,
+        userType: 'human',
+        roleType: 'account_owner',
+        enabled: true,
+      };
+
+      const transaction = await accountService.createAccount(accountData, userData);
+      const response = accountController._buildAccountResponse(transaction.account, transaction.user);
+      responseHelper.created(req, res, response);
+    } catch (error) {
+      responseHelper.error(req, res, error);
     }
-    if (!payload.password) {
-      responseHelper.badRequest(req, res, 'Password is not in right format or not present');
-      return;
-    }
-
-    // Hash the password with bcrypt
-    const hashPassword = await bcrypt.hash(payload.password, config.saltRoundsBcrypt);
-    payload.password = hashPassword;
-
-    // Create account and user
-    const accountData = {
-      name: payload.name,
-      enabled: true,
-    };
-    const userData = {
-      name: payload.username,
-      email: payload.email,
-      password: payload.password,
-      userType: 'human',
-      roleType: 'account_owner',
-      enabled: true,
-    };
-
-    const transaction = await accountService.createAccount(accountData, userData);
-    const response = accountController._buildAccountResponse(transaction.account, transaction.user);
-    responseHelper.created(req, res, response);
   }
 }
 

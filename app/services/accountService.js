@@ -21,11 +21,8 @@ class accountService {
       try {
         const account = await Account.create(accountData, { transaction: t });
         result.account = account;
-        console.log('account', account);
         const data = Object.assign(userData, { accountId: account.id });
-        console.log('data', data);
         const user = await User.create(data, { transaction: t });
-        console.log('user', user);
         result.user = user;
         return result;
       } catch (error) {
