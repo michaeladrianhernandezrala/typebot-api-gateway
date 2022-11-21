@@ -41,7 +41,6 @@ class accountController {
    */
   static async postAccount(req, res) {
     const payload = req.body;
-    console.log('req._user', req._user);
 
     try {
       /**

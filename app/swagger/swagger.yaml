@@ -144,6 +144,44 @@ paths:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
                                 
   /application:
+    get:
+      tags:
+        - application
+      x-eov-operation-handler: applicationController
+      operationId: getListApplications
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountId:
+                  type: integer
+                  description: Account's id
+                find: 
+                  type: string
+                  description: Filter by application's name
+                limit:
+                  type: integer
+                  description: Results per page
+                page: 
+                  type: integer
+                chatbotEnabled:
+                  type: boolean
+                drawerEnabled:
+                  type: boolean
+              required:
+                - accountId
+                - limit
+                - page
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListApplicationsResponse'
     post:
       tags:
         - application
@@ -176,35 +214,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 201
-                  message:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      id: 
-                        type: integer
-                        description: Application's id
-                      name:
-                        type: string
-                        description: Application's name
-                      accountId:
-                        type: integer
-                        description: Account's id
-                      chatbotEnabled:
-                        type: boolean
-                        enum:
-                          - true
-                          - false
-                      drawerEnabled:
-                        type: boolean
-                        enum:
-                          - true
-                          - false
+                $ref: '#/components/schemas/ApplicationCreatedResponse'
         '400':
           description: Bad Request
           content:
@@ -235,13 +245,133 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
-                 
-
+  /application/{id}:
+    get:
+      tags:
+        - application
+      x-eov-operation-handler: applicationController
+      operationId: getSingleApplication
+      parameters:
+        - in: path
+          name: id
+          schema: 
+            type: integer
+          required: true
+          description: Application's id
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationOkResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauhtorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauhtorizedResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+    put:
+      tags:
+        - application
+      x-eov-operation-handler: applicationController
+      operationId: putApplication
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Application's id
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                  description: Application's name
+                chatbotEnabled:
+                  type: boolean
+                  description: If application is enabled for chatbot
+                drawerEnabled:
+                  type: boolean
+                  description: If application is enabled for drawer
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplicationOkResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauhtorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauhtorizedResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+   
 components:
   schemas:
     # ####################################################
     # #################### RESPONSES #####################
     # ####################################################
+    SuccessResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        message:
+          type: string
+    
+    CreatedResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 201
+        message:
+          type: string
+    
     BadRequestResponse:
       type: object
       properties:
@@ -301,6 +431,92 @@ components:
         errorCode:
           type: string
           example: INTERNAL_SERVER_ERROR  
+
+    ListApplicationsResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        message: 
+          type: string
+        count: 
+          type: integer
+        data: 
+          type: array
+          items:
+            type: object
+            properties:
+              id:   
+                type: integer
+                description: Application's id
+              name:
+                type: string
+                description: Application's name
+              createdAt:
+                type: string
+              updatedAt:
+                type: string
+              chatbotEnabled:
+                type: boolean
+              drawerEnabled:
+                type: boolean
+            
+    ApplicationOkResponse: 
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+            name: 
+              type: string
+            accountId: 
+              type: integer
+            chatbotEnabled:
+              type: boolean
+              enum:
+                - true
+                - false
+            drawerEnabled:
+              type: boolean
+              enum:
+                - true
+                - false
+      
+    ApplicationCreatedResponse: 
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 201
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+            name: 
+              type: string
+            accountId: 
+              type: integer
+            chatbotEnabled:
+              type: boolean
+              enum:
+                - true
+                - false
+            drawerEnabled:
+              type: boolean
+              enum:
+                - true
+                - false
   # /user:
   #   post:
   #     tags:
