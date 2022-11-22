@@ -33,8 +33,11 @@ info:
 tags:
   - name: account
     description: Endpoints for managing accounts
+  - name: user
+    description: Endpoints for managing users
   - name: application
     description: Endpoints for managing applications
+  
   
 paths:
   /account:
@@ -142,212 +145,406 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
-                                
-  /application:
-    get:
-      tags:
-        - application
-      x-eov-operation-handler: applicationController
-      operationId: getListApplications
-      requestBody:
-        required: true
-        content: 
-          application/json:
-            schema:
-              type: object
-              properties:
-                accountId:
-                  type: integer
-                  description: Account's id
-                find: 
-                  type: string
-                  description: Filter by application's name
-                limit:
-                  type: integer
-                  description: Results per page
-                page: 
-                  type: integer
-                chatbotEnabled:
-                  type: boolean
-                drawerEnabled:
-                  type: boolean
-              required:
-                - accountId
-                - limit
-                - page
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListApplicationsResponse'
-    post:
-      tags:
-        - application
-      x-eov-operation-handler: applicationController
-      operationId: postApplication
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name: 
-                  type: string
-                  description: Application's name
-                accountId:
-                  type: integer
-                  description: Account's id
-                chatbotEnabled:
-                  type: boolean
-                  description: If application is enabled for chatbot
-                drawerEnabled:
-                  type: boolean
-                  description: If application is enabled for drawer
-              required:
-                - name
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationCreatedResponse'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-        '401':
-          description: Unauhtorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauhtorizedResponse'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ForbiddenResponse'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NotFoundResponse'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerErrorResponse'
-  /application/{id}:
-    get:
-      tags:
-        - application
-      x-eov-operation-handler: applicationController
-      operationId: getSingleApplication
-      parameters:
-        - in: path
-          name: id
-          schema: 
-            type: integer
-          required: true
-          description: Application's id
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationOkResponse'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-        '401':
-          description: Unauhtorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauhtorizedResponse'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NotFoundResponse'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerErrorResponse'
-    put:
-      tags:
-        - application
-      x-eov-operation-handler: applicationController
-      operationId: putApplication
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: Application's id
-      requestBody: 
-        required: true
-        content: 
-          application/json:
-            schema:
-              type: object
-              properties:
-                name: 
-                  type: string
-                  description: Application's name
-                chatbotEnabled:
-                  type: boolean
-                  description: If application is enabled for chatbot
-                drawerEnabled:
-                  type: boolean
-                  description: If application is enabled for drawer
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApplicationOkResponse'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequestResponse'
-        '401':
-          description: Unauhtorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnauhtorizedResponse'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NotFoundResponse'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerErrorResponse'
+  # /user:
+  #   get: 
+  #     tags:
+  #       - user
+  #     x-eov-operation-handler: userController
+  #     operationId: getListUsers
+  #     requestBody: 
+  #       required: true
+  #       content: 
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties: 
+  #               accountId: 
+  #                 type: integer
+  #               find: 
+  #                 type: string
+  #               limit: 
+  #                 type: integer
+  #               page: 
+  #                 type: integer
+  #               userType:
+  #                 type: string
+  #               roleType:
+  #                 type: string
+  #               enabled: 
+  #                 type: boolean
+  #     responses:
+  #       '200':
+  #         description:  'Ok'
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ListUsersResponse'
+  #       '400':
+  #         description: Bad Request
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/BadRequestResponse'
+  #       '401':
+  #         description: Unauhtorized
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/UnauhtorizedResponse'
+  #       '404':
+  #         description: Not Found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/NotFoundResponse'
+  #       '500':
+  #         description: Internal Server Error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/InternalServerErrorResponse'
+  #   post:
+  #     tags:
+  #       - user
+  #     x-eov-operation-handler: userController
+  #     operationId: postUser
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               name:
+  #                 type: string
+  #               lastname: 
+  #                 type: string
+  #               email: 
+  #                 type: string
+  #               password:
+  #                 type: string
+  #               userType: 
+  #                 type: string
+  #               roleType: 
+  #                 type: string
+  #               createdAt:
+  #                 type: string
+  #               updatedAt:
+  #                 type: string
+  #               image:
+  #                 type: string
+  #               accountId:
+  #                 type: integer
+  #               secretKey:
+  #                 type: string
+  #               lang:
+  #                 type: string
+  #               enabled:
+  #                 type: boolean
+  #     responses:
+  #       '201': 
+  #         description: Created
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/UserCreatedResponse'
+  #       '400':
+  #         description: Bad Request
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/BadRequestResponse'
+  #       '401':
+  #         description: Unauhtorized
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/UnauhtorizedResponse'
+  #       '404':
+  #         description: Not Found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/NotFoundResponse'
+  #       '500':
+  #         description: Internal Server Error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/InternalServerErrorResponse'
+  # /user/{id}:
+  #   get:
+  #     tags:
+  #       - user
+  #     x-eov-operation-handler: userController
+  #     operationId: getSingleUser
+  #     parameters:
+  #       - in: path
+  #         name: id
+  #         schema:
+  #           type: integer
+  #         required: true
+  #         description: User's id
+  #     responses:
+  #       '200': 
+  #         description: Ok
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/UserOkResponse'
+  #       '400':
+  #         description: Bad Request
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/BadRequestResponse'
+  #       '401':
+  #         description: Unauhtorized
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/UnauhtorizedResponse'
+  #       '404':
+  #         description: Not Found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/NotFoundResponse'
+  #       '500':
+  #         description: Internal Server Error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/InternalServerErrorResponse'
+  # /application:
+  #   get:
+  #     tags:
+  #       - application
+  #     x-eov-operation-handler: applicationController
+  #     operationId: getListApplications
+  #     requestBody:
+  #       required: true
+  #       content: 
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               accountId:
+  #                 type: integer
+  #                 description: Account's id
+  #               find: 
+  #                 type: string
+  #                 description: Filter by application's name
+  #               limit:
+  #                 type: integer
+  #                 description: Results per page
+  #               page: 
+  #                 type: integer
+  #               chatbotEnabled:
+  #                 type: boolean
+  #               drawerEnabled:
+  #                 type: boolean
+  #             required:
+  #               - accountId
+  #               - limit
+  #               - page
+  #     responses:
+  #       '200':
+  #         description: Ok
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ListApplicationsResponse'
+  #       '400':
+  #         description: Bad Request
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/BadRequestResponse'
+  #       '401':
+  #         description: Unauhtorized
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/UnauhtorizedResponse'
+  #       '404':
+  #         description: Not Found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/NotFoundResponse'
+  #       '500':
+  #         description: Internal Server Error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/InternalServerErrorResponse'
+  #   post:
+  #     tags:
+  #       - application
+  #     x-eov-operation-handler: applicationController
+  #     operationId: postApplication
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               name: 
+  #                 type: string
+  #                 description: Application's name
+  #               accountId:
+  #                 type: integer
+  #                 description: Account's id
+  #               chatbotEnabled:
+  #                 type: boolean
+  #                 description: If application is enabled for chatbot
+  #               drawerEnabled:
+  #                 type: boolean
+  #                 description: If application is enabled for drawer
+  #             required:
+  #               - name
+  #     responses:
+  #       '201':
+  #         description: Created
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ApplicationCreatedResponse'
+  #       '400':
+  #         description: Bad Request
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/BadRequestResponse'
+  #       '401':
+  #         description: Unauhtorized
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/UnauhtorizedResponse'
+  #       '403':
+  #         description: Forbidden
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ForbiddenResponse'
+  #       '404':
+  #         description: Not found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/NotFoundResponse'
+  #       '500':
+  #         description: Internal Server Error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/InternalServerErrorResponse'
+  # /application/{id}:
+  #   get:
+  #     tags:
+  #       - application
+  #     x-eov-operation-handler: applicationController
+  #     operationId: getSingleApplication
+  #     parameters:
+  #       - in: path
+  #         name: id
+  #         schema: 
+  #           type: integer
+  #         required: true
+  #         description: Application's id
+  #     responses:
+  #       '200':
+  #         description: Ok
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ApplicationOkResponse'
+  #       '400':
+  #         description: Bad Request
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/BadRequestResponse'
+  #       '401':
+  #         description: Unauhtorized
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/UnauhtorizedResponse'
+  #       '404':
+  #         description: Not Found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/NotFoundResponse'
+  #       '500':
+  #         description: Internal Server Error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/InternalServerErrorResponse'
+  #   put:
+  #     tags:
+  #       - application
+  #     x-eov-operation-handler: applicationController
+  #     operationId: putApplication
+  #     parameters:
+  #       - in: path
+  #         name: id
+  #         schema:
+  #           type: integer
+  #         required: true
+  #         description: Application's id
+  #     requestBody: 
+  #       required: true
+  #       content: 
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               name: 
+  #                 type: string
+  #                 description: Application's name
+  #               chatbotEnabled:
+  #                 type: boolean
+  #                 description: If application is enabled for chatbot
+  #               drawerEnabled:
+  #                 type: boolean
+  #                 description: If application is enabled for drawer
+  #     responses:
+  #       '200':
+  #         description: Ok
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ApplicationOkResponse'
+  #       '400':
+  #         description: Bad Request
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/BadRequestResponse'
+  #       '401':
+  #         description: Unauhtorized
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/UnauhtorizedResponse'
+  #       '404':
+  #         description: Not Found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/NotFoundResponse'
+  #       '500':
+  #         description: Internal Server Error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/InternalServerErrorResponse'
    
 components:
   schemas:
@@ -431,6 +628,130 @@ components:
         errorCode:
           type: string
           example: INTERNAL_SERVER_ERROR  
+
+    UserOkResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 201
+        message: 
+          type: string
+        data: 
+          type: object
+          properties:
+            id: 
+              type: integer
+            name:
+              type: string
+            lastname: 
+              type: string
+            email: 
+              type: string
+            password:
+              type: string
+            userType: 
+              type: string
+            roleType: 
+              type: string
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+            image:
+              type: string
+            accountId:
+              type: integer
+            secretKey:
+              type: string
+            lang:
+              type: string
+            enabled:
+              type: boolean
+
+    UserCreatedResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 201
+        message: 
+          type: string
+        data: 
+          type: object
+          properties:
+            id: 
+              type: integer
+            name:
+              type: string
+            lastname: 
+              type: string
+            email: 
+              type: string
+            password:
+              type: string
+            userType: 
+              type: string
+            roleType: 
+              type: string
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+            image:
+              type: string
+            accountId:
+              type: integer
+            secretKey:
+              type: string
+            lang:
+              type: string
+            enabled:
+              type: boolean
+    
+    ListUsersResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        message: 
+          type: string
+        count: 
+          type: integer
+        data: 
+          type: array
+          items:
+            type: object
+            properties:
+              id: 
+                type: integer
+              name:
+                type: string
+              lastname: 
+                type: string
+              email: 
+                type: string
+              password:
+                type: string
+              userType: 
+                type: string
+              roleType: 
+                type: string
+              createdAt:
+                type: string
+              updatedAt:
+                type: string
+              image:
+                type: string
+              accountId:
+                type: integer
+              secretKey:
+                type: string
+              lang:
+                type: string
+              enabled:
+                type: boolean
 
     ListApplicationsResponse:
       type: object
@@ -517,6 +838,9 @@ components:
               enum:
                 - true
                 - false
+    
+    
+            
   # /user:
   #   post:
   #     tags:

@@ -29,3 +29,5 @@ app.use(
 const { PORT } = config;
 
 app.listen(PORT, () => logger.info({ message: `[TYPEBOT] Server listening on port ${PORT}` }));
+
+module.exports = app;
