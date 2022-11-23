@@ -17,7 +17,6 @@ class accountController {
   static _buildAccountResponse(account, user) {
     const response = {
       id: account.id,
-      name: account.name,
       createdAt: account.createdAt,
       updatedAt: account.updatedAt,
       enabled: account.enabled,
@@ -62,7 +61,6 @@ class accountController {
 
       // Create account and user
       const accountData = {
-        name: payload.name,
         enabled: true,
       };
       const userData = {
