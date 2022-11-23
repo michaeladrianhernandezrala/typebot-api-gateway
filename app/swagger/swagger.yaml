@@ -145,6 +145,69 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
+  /account/{id}: 
+    get:
+      tags:
+        - account
+      x-eov-operation-handler: accountController
+      operationId: getSingleAccount
+      parameters:
+        - in: path
+          name: id
+          schema:
+              type: integer
+          required: true
+          description: Account's id
+      responses:
+        '200':
+          description: Ok
+          content: 
+            application/json:
+              schema: 
+                properties:
+                  id:
+                    type: integer
+                    description: Account's id
+                  name:
+                    type: string
+                    description: Account's name
+                  createdAt:
+                    type: string
+                  updatedAt:
+                    type: string
+                  enabled:
+                    type: boolean
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauhtorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauhtorizedResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+  
   # /user:
   #   get: 
   #     tags:

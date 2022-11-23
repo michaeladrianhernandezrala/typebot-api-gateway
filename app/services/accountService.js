@@ -30,6 +30,16 @@ class accountService {
       }
     });
   }
+
+  /**
+   * Get a single account by id
+   * @param {*} id
+   * @returns
+   */
+  static async getSingleAccount(id) {
+    const account = await Account.findOne({ where: { id } });
+    return account;
+  }
 }
 
 module.exports = accountService;

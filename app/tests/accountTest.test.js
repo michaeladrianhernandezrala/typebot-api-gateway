@@ -60,3 +60,22 @@ describe('POST /account', () => {
     expect(response.statusCode).toBe(400);
   });
 });
+
+describe('GET /account/{id}', () => {
+  it('should get account with correct id', async () => {
+    const id = 100;
+    const response = await request(baseURL).get(`/account/${id}`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.data).toHaveProperty('id');
+    expect(response.body.data).toHaveProperty('name');
+    expect(response.body.data).toHaveProperty('createdAt');
+    expect(response.body.data).toHaveProperty('updatedAt');
+    expect(response.body.data).toHaveProperty('enabled');
+  });
+
+  it('should return error with no exists id', async () => {
+    const id = 1000000000;
+    const response = await request(baseURL).get(`/account/${id}`);
+    expect(response.statusCode).toBe(400);
+  });
+});

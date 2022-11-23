@@ -81,8 +81,37 @@ class accountController {
       responseHelper.error(req, res, error);
     }
   }
+
+  /**
+   * GET /account/{id}
+   * @param {*} req
+   * @param {*} res
+   * @returns
+   */
+  static async getSingleAccount(req, res) {
+    const { id } = req.params;
+
+    // Check if account's id is present
+    if (!id) {
+      responseHelper.badRequest(req, res, "Account's id param is required");
+      return;
+    }
+
+    try {
+      const account = await accountService.getSingleAccount(id);
+      if (!account) {
+        responseHelper.badRequest(req, res, "Account's id not exists");
+        return;
+      }
+
+      responseHelper.ok(req, res, account);
+    } catch (error) {
+      responseHelper.error(req, res, error);
+    }
+  }
 }
 
 module.exports = {
   postAccount: accountController.postAccount,
+  getSingleAccount: accountController.getSingleAccount,
 };
