@@ -9,7 +9,7 @@ const OpenApiValidator = require('express-openapi-validator');
 const swaggerUi = require('swagger-ui-express');
 const logger = require('./utils/logger');
 
-const config = require('./config/config');
+require('dotenv').config();
 
 const swaggerDocument = YAML.load(fs.readFileSync(path.join(__dirname, 'swagger', 'swagger.yaml')), 'utf-8');
 
@@ -26,7 +26,7 @@ app.use(
   }),
 );
 
-const PORT = config.PORT || 3606;
+const PORT = process.env.PORT || 3606;
 
 app.listen(PORT, () => logger.info({ message: `[TYPEBOT] Server listening on port ${PORT}` }));
 
