@@ -20,3 +20,6 @@ deploy:
   app: typebot-api-gateway
   on:
     repo: michaeladrianhernandezrala/typebot-api-gateway
+    branches:   
+      only:      
+        - main 
