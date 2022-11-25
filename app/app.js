@@ -26,7 +26,7 @@ app.use(
   }),
 );
 
-const PORT = process.env.PORT || 3606;
+const PORT = process.env.PORT || 3610;
 
 app.listen(PORT, () => logger.info({ message: `[TYPEBOT] Server listening on port ${PORT}` }));
 
