@@ -11,7 +11,7 @@ const Account = db.define('Account', {
   },
   name: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
     field: 'name',
   },
   createdAt: {

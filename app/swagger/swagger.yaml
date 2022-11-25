@@ -84,6 +84,9 @@ paths:
                         id:
                           type: integer
                           description: Account's id
+                        name:
+                          type: string
+                          description: Account's name
                         createdAt:
                           type: string
                         updatedAt:

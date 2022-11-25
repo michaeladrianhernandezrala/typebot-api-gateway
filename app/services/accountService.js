@@ -26,6 +26,7 @@ class accountService {
         result.user = user;
         return result;
       } catch (error) {
+        console.log('error', error);
         await t.rollback();
       }
     });

@@ -19,7 +19,8 @@ class accountController {
       id: account.id,
       createdAt: account.createdAt,
       updatedAt: account.updatedAt,
-      enabled: account.enabled,
+      enabled: account?.enabled,
+      name: account?.name ?? '',
       user: {
         id: user.id,
         email: user.email,
