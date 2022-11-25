@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const responseHelper = require('../utils/responseHelper');
-const config = require('../config/config');
 const authService = require('../services/authService');
 const accountService = require('../services/accountService');
 
@@ -35,7 +34,7 @@ class authController {
         return;
       }
 
-      const hasPassword = await bcrypt.hash(payload.password, config.saltRoundsBcrypt);
+      const hasPassword = await bcrypt.hash(payload.password, process.env.saltRoundsBcrypt);
       payload.password = hasPassword;
 
       const userCreated = await authService.createUser(payload);
@@ -92,7 +91,7 @@ class authController {
       }
 
       // eslint-disable-next-line max-len
-      const token = await jwt.sign({ ...user }, config.privateKeyJWT, { expiresIn: config.expiresIn });
+      const token = await jwt.sign({ ...user }, process.env.privateKeyJWT, { expiresIn: process.env.expiresIn });
       user.dataValues.jwt = token;
 
       responseHelper.ok(req, res, user);

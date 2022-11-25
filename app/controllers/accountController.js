@@ -4,7 +4,6 @@ const Isemail = require('isemail');
 const bcrypt = require('bcrypt');
 
 const responseHelper = require('../utils/responseHelper');
-const config = require('../config/config');
 const accountService = require('../services/accountService');
 
 class accountController {
@@ -56,8 +55,9 @@ class accountController {
         return;
       }
 
+      // TODO: Add 10 to process.env
       // Hash the password with bcrypt
-      const hashPassword = await bcrypt.hash(payload.password, config.saltRoundsBcrypt);
+      const hashPassword = await bcrypt.hash(payload.password, 10);
       payload.password = hashPassword;
 
       // Create account and user
@@ -77,6 +77,7 @@ class accountController {
       const response = accountController._buildAccountResponse(transaction.account, transaction.user);
       responseHelper.created(req, res, response);
     } catch (error) {
+      console.log(error);
       responseHelper.error(req, res, error);
     }
   }

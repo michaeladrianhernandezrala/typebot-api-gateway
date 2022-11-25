@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const User = require('../models/user');
 const responseHelper = require('../utils/responseHelper');
-const config = require('../config/config');
 
 class userController {
   static async postUser(req, res) {
@@ -26,7 +25,7 @@ class userController {
 
     try {
       if (paylod.userType === 'human') {
-        const hashPassword = await bcrypt.hash(paylod.password, config.saltRoundsBcrypt);
+        const hashPassword = await bcrypt.hash(paylod.password, process.env.saltRoundsBcrypt);
         paylod.password = hashPassword;
       }
 
