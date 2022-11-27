@@ -1,11 +1,8 @@
 const Sequelize = require('sequelize');
 
-// TODO: Correct the parameter USER_DATABASE
-const {
-  DATABASE, USER_DATABASE, PASSWORD,
-} = process.env;
+const { DATABASE, USERNAME, PASSWORD } = require('../config').sequelize;
 
-const db = new Sequelize(DATABASE, USER_DATABASE, PASSWORD, {
+const db = new Sequelize(DATABASE, USERNAME, PASSWORD, {
   host: 'localhost',
   dialect: 'postgres',
 

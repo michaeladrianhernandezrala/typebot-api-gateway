@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const responseHelper = require('../utils/responseHelper');
 const accountService = require('../services/accountService');
 
+const { bcryptConfig: saltOrRounds } = require('../config');
+
 class accountController {
   /**
    * Build an account response
@@ -55,9 +57,8 @@ class accountController {
         return;
       }
 
-      // TODO: Add 10 to process.env
-      // Hash the password with bcrypt
-      const hashPassword = await bcrypt.hash(payload.password, 10);
+      const hashPassword = await bcrypt.hash(payload.password, saltOrRounds);
+
       payload.password = hashPassword;
 
       // Create account and user
@@ -77,7 +78,6 @@ class accountController {
       const response = accountController._buildAccountResponse(transaction.account, transaction.user);
       responseHelper.created(req, res, response);
     } catch (error) {
-      console.log(error);
       responseHelper.error(req, res, error);
     }
   }
