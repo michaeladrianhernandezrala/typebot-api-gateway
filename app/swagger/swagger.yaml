@@ -3,7 +3,7 @@ info:
   title: TypeBot API V1
   version: '1.0.0'
   description: >
-    
+
     ### Introduction
 
     This documentation describes the interface of TypeBot's API
@@ -12,34 +12,163 @@ info:
 
     Every request to this API need an Authorization header.
 
-    There are two Authorization ways: 
-      
-    - If your intentio is to manage API calls with a server-side script you 
+    There are two Authorization ways:
+
+    - If your intentio is to manage API calls with a server-side script you
     have to create a Server Key through TypeBot's console
-    
+
       You can set the following Authorization Header:
       ```
       Authorization: ServerKey {ServerKey}
       ```
 
-    - If your intention is to integrate this API for front-end user POST /auth 
+    - If your intention is to integrate this API for front-end user POST /auth
     endpoint authorizes a user and returns an access token.
-    
+
       You can set the following Authorization Header:
       ```
       Authorization: Bearer ${Token}
       ```
 
 tags:
+  - name: auth
+    description: Endpoints for managing authorizations
   - name: account
     description: Endpoints for managing accounts
   - name: user
     description: Endpoints for managing users
   - name: application
     description: Endpoints for managing applications
-  
-  
+
 paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+      x-eov-operation-handler: authController
+      operationId: postLoginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User's email
+                password:
+                  type: string
+                  description: User's password
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                      type: integer
+                      example: 201
+                  message:
+                      type: string
+                  data:
+                      type: object
+                      properties:
+                        accessToken:
+                          type: string
+                          description: User's access token
+                        user:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: User's id
+                            name:
+                              type: string
+                              description: User's name
+                            lastname:
+                              type: string
+                              description: User's lastname
+                            email:
+                              type: string
+                              description: User's email
+                            userType:
+                              type: string
+                              description: User's type
+                              enum:
+                                - human
+                                - server
+                            roleType:
+                              type: string
+                              description: Role's type
+                              enum:
+                                - account_admin
+                                - application_user
+                            createdAt:
+                              type: string
+                              description: User's creation date
+                            updatedAt:
+                              type: string
+                              description: User's last update date
+                            userImage:
+                              type: string
+                              description: User's image url
+                            accountId:
+                              type: integer
+                              description: User's account id
+                            secretKey:
+                              type: string
+                            lang:
+                              type: string
+                              description: |
+                                User's language. The format is ISO 639-1 alfa-2.
+                                  Ex:
+                                  ```
+                                  Spanish - es
+                                  English - en
+                                  ```
+                            enabled:
+                              type: boolean
+                              description: If user is enabled
+                              enum:
+                                - true
+                                - false
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauhtorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauhtorizedResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponse'
+
   /account:
     post:
       tags:
@@ -53,7 +182,7 @@ paths:
             schema:
               type: object
               properties:
-                username: 
+                username:
                   type: string
                   description: User's name
                 email:
@@ -141,7 +270,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerErrorResponse'
-  # /account/{id}: 
+  # /account/{id}:
   #   get:
   #     tags:
   #       - account
@@ -157,9 +286,9 @@ paths:
   #     responses:
   #       '200':
   #         description: Ok
-  #         content: 
+  #         content:
   #           application/json:
-  #             schema: 
+  #             schema:
   #               properties:
   #                 id:
   #                   type: integer
@@ -203,33 +332,33 @@ paths:
   #           application/json:
   #             schema:
   #               $ref: '#/components/schemas/InternalServerErrorResponse'
-  
+
   # /user:
-    # get: 
+    # get:
     #   tags:
     #     - user
     #   x-eov-operation-handler: userController
     #   operationId: getListUsers
-    #   requestBody: 
+    #   requestBody:
     #     required: true
-    #     content: 
+    #     content:
     #       application/json:
     #         schema:
     #           type: object
-    #           properties: 
-    #             accountId: 
+    #           properties:
+    #             accountId:
     #               type: integer
-    #             find: 
+    #             find:
     #               type: string
-    #             limit: 
+    #             limit:
     #               type: integer
-    #             page: 
+    #             page:
     #               type: integer
     #             userType:
     #               type: string
     #             roleType:
     #               type: string
-    #             enabled: 
+    #             enabled:
     #               type: boolean
     #   responses:
     #     '200':
@@ -276,15 +405,15 @@ paths:
     #           properties:
     #             name:
     #               type: string
-    #             lastname: 
+    #             lastname:
     #               type: string
-    #             email: 
+    #             email:
     #               type: string
     #             password:
     #               type: string
-    #             userType: 
+    #             userType:
     #               type: string
-    #             roleType: 
+    #             roleType:
     #               type: string
     #             createdAt:
     #               type: string
@@ -301,7 +430,7 @@ paths:
     #             enabled:
     #               type: boolean
     #   responses:
-    #     '201': 
+    #     '201':
     #       description: Created
     #       content:
     #         application/json:
@@ -345,7 +474,7 @@ paths:
   #         required: true
   #         description: User's id
   #     responses:
-  #       '200': 
+  #       '200':
   #         description: Ok
   #         content:
   #           application/json:
@@ -383,7 +512,7 @@ paths:
   #     operationId: getListApplications
   #     requestBody:
   #       required: true
-  #       content: 
+  #       content:
   #         application/json:
   #           schema:
   #             type: object
@@ -391,13 +520,13 @@ paths:
   #               accountId:
   #                 type: integer
   #                 description: Account's id
-  #               find: 
+  #               find:
   #                 type: string
   #                 description: Filter by application's name
   #               limit:
   #                 type: integer
   #                 description: Results per page
-  #               page: 
+  #               page:
   #                 type: integer
   #               chatbotEnabled:
   #                 type: boolean
@@ -450,7 +579,7 @@ paths:
   #           schema:
   #             type: object
   #             properties:
-  #               name: 
+  #               name:
   #                 type: string
   #                 description: Application's name
   #               accountId:
@@ -510,7 +639,7 @@ paths:
   #     parameters:
   #       - in: path
   #         name: id
-  #         schema: 
+  #         schema:
   #           type: integer
   #         required: true
   #         description: Application's id
@@ -557,14 +686,14 @@ paths:
   #           type: integer
   #         required: true
   #         description: Application's id
-  #     requestBody: 
+  #     requestBody:
   #       required: true
-  #       content: 
+  #       content:
   #         application/json:
   #           schema:
   #             type: object
   #             properties:
-  #               name: 
+  #               name:
   #                 type: string
   #                 description: Application's name
   #               chatbotEnabled:
@@ -604,7 +733,7 @@ paths:
   #           application/json:
   #             schema:
   #               $ref: '#/components/schemas/InternalServerErrorResponse'
-   
+
 components:
   schemas:
     # ####################################################
@@ -618,7 +747,7 @@ components:
           example: 200
         message:
           type: string
-    
+
     CreatedResponse:
       type: object
       properties:
@@ -627,7 +756,7 @@ components:
           example: 201
         message:
           type: string
-    
+
     BadRequestResponse:
       type: object
       properties:
@@ -639,19 +768,19 @@ components:
         errorCode:
           type: string
           example: BAD_REQUEST
-    
+
     UnauhtorizedResponse:
       type: object
       properties:
         statusCode:
           type: integer
           example: 401
-        message: 
+        message:
           type: string
         errorCode:
           type: string
           example: UNAUTHORIZED
-    
+
     ForbiddenResponse:
       type: object
       properties:
@@ -674,7 +803,7 @@ components:
           type: string
         errorCode:
           type: string
-          example: NOT_FOUND 
+          example: NOT_FOUND
 
     InternalServerErrorResponse:
       type: object
@@ -686,7 +815,7 @@ components:
           type: string
         errorCode:
           type: string
-          example: INTERNAL_SERVER_ERROR  
+          example: INTERNAL_SERVER_ERROR
 
     UserOkResponse:
       type: object
@@ -694,24 +823,24 @@ components:
         statusCode:
           type: integer
           example: 201
-        message: 
+        message:
           type: string
-        data: 
+        data:
           type: object
           properties:
-            id: 
+            id:
               type: integer
             name:
               type: string
-            lastname: 
+            lastname:
               type: string
-            email: 
+            email:
               type: string
             password:
               type: string
-            userType: 
+            userType:
               type: string
-            roleType: 
+            roleType:
               type: string
             createdAt:
               type: string
@@ -734,24 +863,24 @@ components:
         statusCode:
           type: integer
           example: 201
-        message: 
+        message:
           type: string
-        data: 
+        data:
           type: object
           properties:
-            id: 
+            id:
               type: integer
             name:
               type: string
-            lastname: 
+            lastname:
               type: string
-            email: 
+            email:
               type: string
             password:
               type: string
-            userType: 
+            userType:
               type: string
-            roleType: 
+            roleType:
               type: string
             createdAt:
               type: string
@@ -767,35 +896,35 @@ components:
               type: string
             enabled:
               type: boolean
-    
+
     ListUsersResponse:
       type: object
       properties:
         statusCode:
           type: integer
           example: 200
-        message: 
+        message:
           type: string
-        count: 
+        count:
           type: integer
-        data: 
+        data:
           type: array
           items:
             type: object
             properties:
-              id: 
+              id:
                 type: integer
               name:
                 type: string
-              lastname: 
+              lastname:
                 type: string
-              email: 
+              email:
                 type: string
               password:
                 type: string
-              userType: 
+              userType:
                 type: string
-              roleType: 
+              roleType:
                 type: string
               createdAt:
                 type: string
@@ -818,16 +947,16 @@ components:
         statusCode:
           type: integer
           example: 200
-        message: 
+        message:
           type: string
-        count: 
+        count:
           type: integer
-        data: 
+        data:
           type: array
           items:
             type: object
             properties:
-              id:   
+              id:
                 type: integer
                 description: Application's id
               name:
@@ -841,8 +970,8 @@ components:
                 type: boolean
               drawerEnabled:
                 type: boolean
-            
-    ApplicationOkResponse: 
+
+    ApplicationOkResponse:
       type: object
       properties:
         statusCode:
@@ -855,9 +984,9 @@ components:
           properties:
             id:
               type: integer
-            name: 
+            name:
               type: string
-            accountId: 
+            accountId:
               type: integer
             chatbotEnabled:
               type: boolean
@@ -869,8 +998,8 @@ components:
               enum:
                 - true
                 - false
-      
-    ApplicationCreatedResponse: 
+
+    ApplicationCreatedResponse:
       type: object
       properties:
         statusCode:
@@ -883,9 +1012,9 @@ components:
           properties:
             id:
               type: integer
-            name: 
+            name:
               type: string
-            accountId: 
+            accountId:
               type: integer
             chatbotEnabled:
               type: boolean
@@ -897,9 +1026,9 @@ components:
               enum:
                 - true
                 - false
-    
-    
-            
+
+
+
   # /user:
   #   post:
   #     tags:
@@ -917,14 +1046,14 @@ components:
   #               - enabled
   #               - email
   #               - password
-  #             properties: 
+  #             properties:
   #               userType:
   #                 type: string
   #                 enum:
   #                   - human
   #                   - server
   #                 description: "User's type. Two types: 'human' or 'server'"
-  #               name: 
+  #               name:
   #                 type: string
   #                 description: User's name
   #               lastname:
@@ -942,7 +1071,7 @@ components:
   #                   - account_admin
   #                   - application_user
   #                 description: "Role's type. Two types: 'account_admin' or 'application_user"
-  #               accountId:  
+  #               accountId:
   #                 type: integer
   #                 description: Account's id where you will create the user
   #               description:
@@ -951,8 +1080,8 @@ components:
   #               lang:
   #                 type: string
   #                 description: |
-  #                   User's language. The format is ISO 639-1 alfa-2. 
-  #                     Ex: 
+  #                   User's language. The format is ISO 639-1 alfa-2.
+  #                     Ex:
   #                     ```
   #                     Spanish - es
   #                     English - en
@@ -979,15 +1108,15 @@ components:
   #                   type: integer
   #                   example: 201
   #                   description: Response code
-  #                 message:  
+  #                 message:
   #                   type: string
   #                   example: Created
   #                   description: message
-  #                 data: 
+  #                 data:
   #                   type: object
   #                   description: Data response
   #                   properties:
-  #                     id: 
+  #                     id:
   #                       type: integer
   #                       description: User's id
   #                     name:
@@ -1011,7 +1140,7 @@ components:
   #                       enum:
   #                         - account_admin
   #                         - application_user
-  #                     createdAt: 
+  #                     createdAt:
   #                       type: string
   #                       description: User's creation date
   #                     updatedAt:
@@ -1028,8 +1157,8 @@ components:
   #                     lang:
   #                       type: string
   #                       description: |
-  #                         User's language. The format is ISO 639-1 alfa-2. 
-  #                           Ex: 
+  #                         User's language. The format is ISO 639-1 alfa-2.
+  #                           Ex:
   #                           ```
   #                           Spanish - es
   #                           English - en

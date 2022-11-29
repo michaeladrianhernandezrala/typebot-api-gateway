@@ -9,8 +9,6 @@ const OpenApiValidator = require('express-openapi-validator');
 const swaggerUi = require('swagger-ui-express');
 const logger = require('./utils/logger');
 
-require('dotenv').config();
-
 const swaggerDocument = YAML.load(fs.readFileSync(path.join(__dirname, 'swagger', 'swagger.yaml')), 'utf-8');
 
 app.use(bodyParser.json());

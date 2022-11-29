@@ -4,11 +4,13 @@ module.exports = {
   },
   bcryptConfig: {
     saltOrRounds: 10,
+    privateKeyJWT: 'IQKcPhiam7EUw4lein026RUnAmD5KQ36',
+    expiresIn: '2d',
   },
   sequelize: {
-    DATABASE: 'typebot-service-db',
-    USER_DATABASE: 'typebot-service-user',
-    PASSWORD: 'typebot-service-user',
+    DATABASE: 'typebot_service_db',
+    USERNAME: 'typebot_service_user',
+    PASSWORD: 'typebot_service_user',
   },
 
 };

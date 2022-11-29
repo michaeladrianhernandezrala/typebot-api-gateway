@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const responseHelper = require('../utils/responseHelper');
 const accountService = require('../services/accountService');
 
-const { bcryptConfig: saltOrRounds } = require('../config');
+const { bcryptConfig: { saltOrRounds } } = require('../config');
 
 class accountController {
   /**
