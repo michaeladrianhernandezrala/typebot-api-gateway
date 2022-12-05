@@ -48,7 +48,6 @@ class authController {
 
       responseHelper.ok(req, res, response);
     } catch (error) {
-      console.log(error);
       responseHelper.error(req, res, error);
     }
   }
